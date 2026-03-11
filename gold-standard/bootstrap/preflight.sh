@@ -9,11 +9,19 @@ echo '== User =='
 id
 
 echo '== Required commands =='
-for cmd in git nft sshd wg systemctl ip ss; do
+for cmd in git wg systemctl ip ss; do
   if command -v "$cmd" >/dev/null 2>&1; then
     echo "OK   $cmd -> $(command -v "$cmd")"
   else
     echo "MISS $cmd"
+  fi
+done
+
+for path in /usr/sbin/nft /usr/sbin/sshd; do
+  if [ -x "$path" ]; then
+    echo "OK   $path"
+  else
+    echo "MISS $path"
   fi
 done
 

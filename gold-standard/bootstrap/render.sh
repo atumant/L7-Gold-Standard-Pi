@@ -41,5 +41,7 @@ table inet filter {
 }
 EOF
 
+"$ROOT/bootstrap/render-ssh.sh"
+
 echo "Rendered to: $OUT"
 ls -l "$OUT"
