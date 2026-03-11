@@ -1,0 +1,177 @@
+version: 1
+profile:
+  name: default-siem-forwarding
+  environment: production
+  organization: Atum
+  owner: Azrael_Atum
+
+identity:
+  customer_id: change-me
+  asset_id: change-me
+  hostname: auto
+  site: change-me
+  region: change-me
+  timezone: auto
+
+format:
+  primary: jsonl
+  secondary: syslog_rfc5424
+  timestamp: rfc3339_utc
+  delimiter: ":"
+  include_human_readable_message: true
+  include_raw_event_copy: true
+
+schema:
+  required_fields:
+    - ts
+    - event_id
+    - event_type
+    - severity
+    - host
+    - source
+    - actor
+    - action
+    - outcome
+    - network
+    - trace
+    - message
+  recommended_fields:
+    - org
+    - env
+    - asset_id
+    - site
+    - geo
+    - tags
+    - vendor
+    - product
+    - raw
+
+sources:
+  system:
+    enabled: true
+    include:
+      - syslog
+      - journald
+      - ssh
+      - nftables
+      - sudo
+      - cron
+      - kernel
+  openclaw:
+    enabled: true
+    include:
+      - gateway
+      - sessions
+      - tool_exec
+      - cron
+      - config_apply
+      - approvals
+  wireguard:
+    enabled: true
+    include:
+      - handshake
+      - peer_state
+      - config_apply
+  git:
+    enabled: true
+    include:
+      - commit
+      - push
+      - pull
+  bootstrap:
+    enabled: true
+    include:
+      - preflight
+      - render
+      - apply
+      - verify
+      - savepoint
+      - rollback
+
+normalization:
+  vendor: gold-standard
+  product: installer-backend
+  map_severity:
+    debug: 7
+    info: 6
+    notice: 5
+    warning: 4
+    error: 3
+    critical: 2
+    alert: 1
+    emergency: 0
+  actor_fallback: system
+  outcome_values:
+    - success
+    - failure
+    - unknown
+  ip_enrichment:
+    enabled: true
+    mode: external_enricher_preferred
+    local_fields:
+      - src_ip
+      - dst_ip
+      - public_ip
+      - wg_peer_ip
+
+forwarding:
+  default_mode: local_buffer_then_forward
+  local_buffer:
+    enabled: true
+    path: /var/log/gold-standard/events.jsonl
+    rotation: daily
+    compression: gzip
+    max_size_mb: 100
+    retention_days: 7
+  outputs:
+    - name: splunk_hec
+      enabled: false
+      type: https_json
+      endpoint: https://splunk.example.com:8088/services/collector
+      token_env: SPLUNK_HEC_TOKEN
+      tls_verify: true
+      batch_max_events: 500
+    - name: sentinel_syslog
+      enabled: false
+      type: syslog_tls
+      endpoint: sentinel.example.com:6514
+      tls_verify: true
+      facility: local0
+    - name: generic_syslog
+      enabled: false
+      type: syslog_udp
+      endpoint: 10.0.0.50:514
+      facility: local0
+    - name: generic_https
+      enabled: false
+      type: https_json
+      endpoint: https://siem.example.com/ingest
+      auth_header_env: SIEM_AUTH_HEADER
+      tls_verify: true
+
+correlation:
+  include_trace_ids: true
+  trace_id_source: generated
+  include_session_ids: true
+  include_host_boot_id: true
+  include_git_commit: true
+  include_run_id: true
+  include_parent_event_id: true
+
+privacy:
+  redact:
+    - secrets
+    - tokens
+    - passwords
+    - private_keys
+    - access_keys
+  hash_fields:
+    - email
+    - phone
+  raw_event_max_bytes: 16384
+
+examples:
+  json_event: |
+    {"ts":"2026-03-11T04:00:00Z","event_id":"01HXYZ...","event_type":"auth.ssh.login","severity":"info","host":{"hostname":"TechPi","asset_id":"pi-001"},"source":{"system":"sshd","channel":"journald"},"actor":{"user":"admin","type":"human"},"action":"login","outcome":"success","network":{"src_ip":"10.77.0.2","dst_ip":"10.77.0.1"},"trace":{"run_id":"2026-03-11_001354","session_id":"abc123"},"message":"SSH public key login accepted"}
+  logfmt_event: |
+    ts=2026-03-11T04:00:00Z event_id=01HXYZ event_type=auth.ssh.login severity=info hostname=TechPi user=admin action=login outcome=success src_ip=10.77.0.2 dst_ip=10.77.0.1 run_id=2026-03-11_001354 msg="SSH public key login accepted"
