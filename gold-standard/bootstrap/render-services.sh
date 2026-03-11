@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+OUT="$ROOT/rendered/services"
+mkdir -p "$OUT"
+
+DISABLE_CUPS="${DISABLE_CUPS:-true}"
+DISABLE_RPCBIND="${DISABLE_RPCBIND:-true}"
+DISABLE_AVAHI="${DISABLE_AVAHI:-true}"
+DISABLE_MODEMMANAGER="${DISABLE_MODEMMANAGER:-true}"
+PRESERVE_PI_CONNECT="${PRESERVE_PI_CONNECT:-true}"
+
+cat > "$OUT/service-profile.env" <<EOF
+DISABLE_CUPS=${DISABLE_CUPS}
+DISABLE_RPCBIND=${DISABLE_RPCBIND}
+DISABLE_AVAHI=${DISABLE_AVAHI}
+DISABLE_MODEMMANAGER=${DISABLE_MODEMMANAGER}
+PRESERVE_PI_CONNECT=${PRESERVE_PI_CONNECT}
+EOF
+
+echo "Rendered service profile to: $OUT"
+ls -l "$OUT"

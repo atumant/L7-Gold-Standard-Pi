@@ -1,0 +1,4 @@
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             UP             192.168.5.74/22 fda0:3f95:a8ed:1:2ecf:67ff:fedc:50b2/64 fe80::2ecf:67ff:fedc:50b2/64 
+wlan0            UP             192.168.4.209/22 fda0:3f95:a8ed:1:2ecf:67ff:fedc:50b3/64 fe80::2ecf:67ff:fedc:50b3/64 
+wg0              UNKNOWN        10.77.0.1/24 
