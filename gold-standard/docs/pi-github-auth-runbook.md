@@ -22,5 +22,11 @@ Add a GitHub host stanza using this dedicated key.
 git@github.com:atumant/L7-Gold-Standard-Pi.git
 ```
 
+## Operator action
+Copy the public key directly from the host-local file when adding it to GitHub:
+```bash
+cat /home/admin/.ssh/github_azrael_atum.pub
+```
+
 ## Security note
-Do not commit the private key. Only the public key should ever be copied into docs or GitHub.
+Do not commit the private key. For privacy hygiene, do not keep the public key in the tracked repository either; copy it from the local `.pub` file when needed.
