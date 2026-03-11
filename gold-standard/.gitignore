@@ -1,0 +1,20 @@
+# Local secrets and generated state
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Operator-only live copies
+savepoints/live-home-copies/*.secret
+
+# OS/editor noise
+.DS_Store
+.vscode/
+*.swp
+
+# Generated savepoint captures
+savepoints/*/
+!savepoints/*.md
+!savepoints/live-home-copies/
+!savepoints/live-home-copies/*.txt

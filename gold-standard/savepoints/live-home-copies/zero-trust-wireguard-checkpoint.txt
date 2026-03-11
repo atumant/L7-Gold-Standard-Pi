@@ -1,0 +1,56 @@
+Zero Trust / WireGuard Checkpoint
+Timestamp: 2026-03-10 22:11 America/New_York
+Host: Raspberry Pi 5 class device, Debian 13 (trixie)
+User: admin
+Workspace: /home/admin/.openclaw/workspace
+
+Current hardened state
+- WireGuard server active on wg0 (10.77.0.1/24, UDP 51820)
+- Public IP verified: 47.189.222.13
+- WireGuard tunnel tested successfully
+- SSH over WireGuard works from Mac
+- SSH key auth works with the new Mac key
+- PasswordAuthentication is disabled
+- nftables firewall active and persistent
+- SSH exposure restricted to LAN + WireGuard only
+- Secure OpenClaw UI remote access works via SSH local port forward
+- Pi Connect preserved
+- SSH hardening applied: X11Forwarding disabled, AllowAgentForwarding disabled
+- TCP forwarding preserved for remote UI tunnel use
+- Service minimization applied: ModemManager disabled; rpcbind and avahi disabled and socket-cleanup in progress/completed per latest check
+- CUPS intentionally left enabled for now
+
+Current nftables posture
+- default input policy: drop
+- allow loopback
+- allow established/related
+- allow ICMP/ICMPv6
+- allow SSH from 192.168.4.0/22
+- allow SSH from 10.77.0.0/24
+- allow all IPv4 traffic from 192.168.4.0/22
+- allow all IPv4 traffic from 10.77.0.0/24
+- allow UDP 51820 from anywhere
+- forward policy drop
+- output policy accept
+
+Current SSH posture
+- PasswordAuthentication no
+- PubkeyAuthentication yes
+- X11Forwarding no
+- AllowAgentForwarding no
+- AllowTcpForwarding yes
+- AllowStreamLocalForwarding yes
+
+Remaining hardening/backlog
+- Decide whether to disable CUPS
+- Consider reducing AllowStreamLocalForwarding later if not needed
+- Consider restricting SSH listen addresses at sshd level later (not just firewall)
+- Review other enabled desktop/consumer services for minimization
+- Plan backup + replication image flow
+- Plan encrypted rebuild/migration for full-disk encryption
+- Design MFA layer for admin/UI access path
+- Package this into a reproducible bootstrap/install repository
+
+Resume instruction
+Tell Azrael exactly:
+"Resume from /home/admin/zero-trust-wireguard-checkpoint.txt and continue with packaging this host as the gold-standard reproducible build, then review remaining services and backup/image automation."

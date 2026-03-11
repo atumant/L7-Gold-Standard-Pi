@@ -1,0 +1,19 @@
+Zero Trust / WireGuard Resume Commands
+
+1) Read checkpoint
+cat /home/admin/zero-trust-wireguard-checkpoint.txt
+
+2) Confirm firewall and WireGuard state
+sudo nft list ruleset
+sudo wg show wg0
+sudo ss -ltnup | egrep '(:22\s|:51820\s|Local Address)'
+
+3) Re-test SSH over VPN from the Mac
+ssh -i ~/.ssh/id_ed25519_new admin@10.77.0.1
+
+4) Secure remote OpenClaw UI over SSH tunnel
+ssh -i ~/.ssh/id_ed25519_new -L 18789:127.0.0.1:18789 admin@10.77.0.1
+# then browse to http://127.0.0.1:18789 on the Mac
+
+5) Resume with Azrael
+Resume from /home/admin/zero-trust-wireguard-checkpoint.txt and continue with Phase 6 SSH auth tightening. Re-verify VPN key SSH, then disable password SSH without affecting Pi Connect.
