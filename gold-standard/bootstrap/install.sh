@@ -10,16 +10,17 @@ usage() {
 Gold Standard bootstrap
 
 Usage:
-  bootstrap/install.sh [all|preflight|facts|packages|render|configs|verify|savepoint]
+  bootstrap/install.sh [all|preflight|facts|packages|render|configs|verify|savepoint|cloud]
 
 Phases:
   preflight  - validate OS, privileges, network tools, and directories
   facts      - capture reusable host facts into rendered/facts
-  packages   - install required packages (placeholder for staged package actions)
+  packages   - install required packages (plan mode via orchestrator)
   render     - render env-driven output files into rendered/
   configs    - stage config files and print manual/apply guidance
   verify     - run verification checks
   savepoint  - capture a dated save point
+  cloud      - run cloud-profile branching guidance
   all        - run preflight, facts, packages, render, configs, verify, savepoint
 EOF
 }
@@ -50,6 +51,10 @@ run_configs() {
   "$ROOT/bootstrap/run-phase.sh" configs "$ROOT/bootstrap/stage-configs.sh"
 }
 
+run_cloud() {
+  "$ROOT/bootstrap/run-phase.sh" cloud "$ROOT/bootstrap/cloud-branch.sh"
+}
+
 run_verify() {
   "$ROOT/bootstrap/run-phase.sh" verify "$ROOT/bootstrap/verify.sh"
 }
@@ -64,6 +69,7 @@ case "$PHASE" in
   packages) init_run; run_packages ;;
   render) init_run; run_render ;;
   configs) init_run; run_configs ;;
+  cloud) init_run; run_cloud ;;
   verify) init_run; run_verify ;;
   savepoint) init_run; run_savepoint ;;
   all)
