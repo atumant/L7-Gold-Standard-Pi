@@ -21,7 +21,9 @@ savepoints/*/
 
 # Generated rendered/runtime artifacts
 output/*/
+archives/*
 rendered/facts/
 rendered/services/
 rendered/ssh/
 !rendered/.keep
+!archives/.keep

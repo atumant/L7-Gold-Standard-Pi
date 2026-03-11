@@ -39,7 +39,7 @@ run_facts() {
 }
 
 run_packages() {
-  "$ROOT/bootstrap/run-phase.sh" packages "$ROOT/bootstrap/packages.sh"
+  "$ROOT/bootstrap/run-phase.sh" packages "$ROOT/bootstrap/packages.sh" plan
 }
 
 run_render() {

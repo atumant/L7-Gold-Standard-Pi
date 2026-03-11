@@ -22,11 +22,14 @@ if [[ ! "$ans" =~ ^[Yy]$ ]]; then
 fi
 
 cd "$ROOT"
-./bootstrap/install.sh render
-./bootstrap/apply.sh
-./bootstrap/verify.sh
-./bootstrap/apply-ssh.sh
-./bootstrap/verify.sh
-./bootstrap/apply-services.sh
-./bootstrap/verify.sh
-./scripts/capture-savepoint.sh
+RUN_OUT="$(./bootstrap/run-manifest.sh)"
+export OUT_DIR="$RUN_OUT"
+./bootstrap/run-phase.sh render ./bootstrap/render.sh
+./bootstrap/run-phase.sh apply-firewall ./bootstrap/apply.sh
+./bootstrap/run-phase.sh verify-firewall ./bootstrap/verify.sh
+./bootstrap/run-phase.sh apply-ssh ./bootstrap/apply-ssh.sh
+./bootstrap/run-phase.sh verify-ssh ./bootstrap/verify.sh
+./bootstrap/run-phase.sh apply-services ./bootstrap/apply-services.sh
+./bootstrap/run-phase.sh verify-services ./bootstrap/verify.sh
+./bootstrap/run-phase.sh savepoint ./scripts/capture-savepoint.sh
+./scripts/archive-output.sh "$RUN_OUT" >/dev/null 2>&1 || true

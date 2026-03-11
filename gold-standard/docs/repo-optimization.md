@@ -19,7 +19,8 @@ Keep the repository lean, durable, and scalable.
 
 ## Runtime storage pattern
 - write detailed run artifacts to `output/<run-id>/`
-- optionally compress them to `archives/<run-id>.tar.gz`
+- compress them to `archives/<run-id>.tar.gz` when needed
+- do not track routine outputs or archives in git
 - keep only durable/manual save points in git
 
 ## Why
