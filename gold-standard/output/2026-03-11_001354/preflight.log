@@ -1,0 +1,73 @@
+== phase: preflight ==
+timestamp=2026-03-11T00:13:54-04:00
+== Preflight ==
+Linux TechPi 6.12.62+rpt-rpi-2712 #1 SMP PREEMPT Debian 1:6.12.62-1+rpt1 (2025-12-18) aarch64 GNU/Linux
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+NAME="Debian GNU/Linux"
+VERSION_ID="13"
+VERSION="13 (trixie)"
+VERSION_CODENAME=trixie
+DEBIAN_VERSION_FULL=13.3
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+== User ==
+uid=1000(admin) gid=1000(admin) groups=1000(admin),4(adm),20(dialout),24(cdrom),27(sudo),29(audio),44(video),46(plugdev),60(games),100(users),102(netdev),984(nordvpn),986(gpio),988(i2c),989(spi),992(render),996(input)
+== Required commands ==
+OK   git -> /usr/bin/git
+OK   wg -> /usr/bin/wg
+OK   systemctl -> /usr/bin/systemctl
+OK   ip -> /usr/bin/ip
+OK   ss -> /usr/bin/ss
+OK   /usr/sbin/nft
+OK   /usr/sbin/sshd
+== Network summary ==
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eth0             UP             192.168.5.74/22 fda0:3f95:a8ed:1:2ecf:67ff:fedc:50b2/64 fe80::2ecf:67ff:fedc:50b2/64 
+wlan0            UP             192.168.4.209/22 fda0:3f95:a8ed:1:2ecf:67ff:fedc:50b3/64 fe80::2ecf:67ff:fedc:50b3/64 
+wg0              UNKNOWN        10.77.0.1/24 
+== WireGuard summary ==
+wg0              UNKNOWN        10.77.0.1/24 
+interface: wg0
+  public key: 4TZz502mgTXpYy/XJo8mJI1LvROj4R9uEDX3FRzk7zw=
+  private key: (hidden)
+  listening port: 51820
+
+peer: YyEAlaFdnikyN8B/MY6YOofQkzAZEcF5brsemBiA1n4=
+  preshared key: (hidden)
+  endpoint: 47.189.222.13:54536
+  allowed ips: 10.77.0.2/32
+  latest handshake: 1 minute, 16 seconds ago
+  transfer: 3.12 MiB received, 53.01 MiB sent
+== Firewall summary ==
+table inet filter {
+	chain input {
+		type filter hook input priority filter; policy drop;
+		iif "lo" accept
+		ct state established,related accept
+		ct state invalid drop
+		ip protocol icmp accept
+		ip6 nexthdr ipv6-icmp accept
+		ip saddr 192.168.4.0/22 tcp dport 22 accept
+		ip saddr 10.77.0.0/24 tcp dport 22 accept
+		ip saddr 192.168.4.0/22 accept
+		ip saddr 10.77.0.0/24 accept
+		udp dport 51820 accept
+	}
+
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+	}
+
+	chain output {
+		type filter hook output priority filter; policy accept;
+	}
+}
+== SSH summary ==
+pubkeyauthentication yes
+passwordauthentication no
+x11forwarding no
+allowtcpforwarding yes
+allowagentforwarding no
+allowstreamlocalforwarding yes

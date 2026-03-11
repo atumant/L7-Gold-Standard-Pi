@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PHASE="${1:-all}"
+OUT_DIR=""
 
 usage() {
   cat <<'EOF'
@@ -23,44 +24,50 @@ Phases:
 EOF
 }
 
+init_run() {
+  OUT_DIR="$($ROOT/bootstrap/run-manifest.sh)"
+  export OUT_DIR
+  echo "Run output: $OUT_DIR"
+}
+
 run_preflight() {
-  "$ROOT/bootstrap/preflight.sh"
+  "$ROOT/bootstrap/run-phase.sh" preflight "$ROOT/bootstrap/preflight.sh"
 }
 
 run_facts() {
-  "$ROOT/bootstrap/facts.sh"
+  "$ROOT/bootstrap/run-phase.sh" facts "$ROOT/bootstrap/facts.sh"
 }
 
 run_packages() {
-  "$ROOT/bootstrap/packages.sh"
+  "$ROOT/bootstrap/run-phase.sh" packages "$ROOT/bootstrap/packages.sh"
 }
 
 run_render() {
-  "$ROOT/bootstrap/render.sh"
-  "$ROOT/bootstrap/render-services.sh"
+  "$ROOT/bootstrap/run-phase.sh" render "$ROOT/bootstrap/render.sh"
 }
 
 run_configs() {
-  "$ROOT/bootstrap/stage-configs.sh"
+  "$ROOT/bootstrap/run-phase.sh" configs "$ROOT/bootstrap/stage-configs.sh"
 }
 
 run_verify() {
-  "$ROOT/bootstrap/verify.sh"
+  "$ROOT/bootstrap/run-phase.sh" verify "$ROOT/bootstrap/verify.sh"
 }
 
 run_savepoint() {
-  "$ROOT/scripts/capture-savepoint.sh"
+  "$ROOT/bootstrap/run-phase.sh" savepoint "$ROOT/scripts/capture-savepoint.sh"
 }
 
 case "$PHASE" in
-  preflight) run_preflight ;;
-  facts) run_facts ;;
-  packages) run_packages ;;
-  render) run_render ;;
-  configs) run_configs ;;
-  verify) run_verify ;;
-  savepoint) run_savepoint ;;
+  preflight) init_run; run_preflight ;;
+  facts) init_run; run_facts ;;
+  packages) init_run; run_packages ;;
+  render) init_run; run_render ;;
+  configs) init_run; run_configs ;;
+  verify) init_run; run_verify ;;
+  savepoint) init_run; run_savepoint ;;
   all)
+    init_run
     run_preflight
     run_facts
     run_packages
