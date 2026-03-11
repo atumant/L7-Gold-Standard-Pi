@@ -18,3 +18,10 @@ savepoints/*/
 !savepoints/*.md
 !savepoints/live-home-copies/
 !savepoints/live-home-copies/*.txt
+
+# Generated rendered/runtime artifacts
+output/*/
+rendered/facts/
+rendered/services/
+rendered/ssh/
+!rendered/.keep
