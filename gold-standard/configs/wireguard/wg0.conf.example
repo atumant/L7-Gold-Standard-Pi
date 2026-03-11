@@ -1,0 +1,11 @@
+[Interface]
+Address = 10.77.0.1/24
+ListenPort = 51820
+PrivateKey = REPLACE_SERVER_PRIVATE_KEY
+SaveConfig = false
+
+# Example peer
+#[Peer]
+# PublicKey = REPLACE_CLIENT_PUBLIC_KEY
+# PresharedKey = REPLACE_CLIENT_PSK
+# AllowedIPs = 10.77.0.2/32
