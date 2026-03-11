@@ -8,6 +8,7 @@ echo "Platform: $PLATFORM"
 case "$PLATFORM" in
   debian-like)
     PKGS=(wireguard wireguard-tools nftables qrencode git curl)
+    command -v node >/dev/null 2>&1 || PKGS+=(nodejs npm)
     echo "Packages: ${PKGS[*]}"
     if [ "$EVAL" = "apply" ]; then
       sudo apt-get update

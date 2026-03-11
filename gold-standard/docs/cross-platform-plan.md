@@ -14,6 +14,7 @@ Mostly the same as Debian-like path, but with profile differences:
 - public cloud networking/security groups
 - no Pi Connect assumptions
 - often no desktop services to strip
+- cloud profile/env examples and tighter firewall expectations
 
 ### 3. macOS
 Primarily operator/development/control host path.
