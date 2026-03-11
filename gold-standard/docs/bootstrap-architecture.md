@@ -23,13 +23,15 @@ But the hosted script should only act as a thin launcher that:
 ## Planned bootstrap phases
 1. preflight (OS/version, privilege, network, package manager)
 2. package install (wireguard, nftables, qrencode, optional tools)
-3. OpenClaw install/verification
-4. WireGuard server bootstrap
-5. SSH hardening bootstrap
-6. firewall apply with preserve-access strategy
-7. service minimization profile
-8. verification suite
-9. save-point capture
+3. profile/env input loading
+4. render staged configs from profile
+5. OpenClaw install/verification
+6. WireGuard server bootstrap
+7. SSH hardening bootstrap
+8. firewall apply with preserve-access strategy
+9. service minimization profile
+10. verification suite
+11. save-point capture
 
 ## Inputs the bootstrap should accept
 - hostname/profile name
