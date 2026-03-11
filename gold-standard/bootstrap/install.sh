@@ -1,14 +1,65 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cat <<'EOF'
-Gold Standard bootstrap placeholder
 
-This entrypoint will eventually:
-1. perform preflight checks
-2. install required packages
-3. stage OpenClaw + WireGuard + nftables config
-4. apply hardening in reversible phases
-5. capture a save point
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PHASE="${1:-all}"
 
-For now, use the repository docs and scripts directly.
+usage() {
+  cat <<'EOF'
+Gold Standard bootstrap
+
+Usage:
+  bootstrap/install.sh [all|preflight|packages|configs|verify|savepoint]
+
+Phases:
+  preflight  - validate OS, privileges, network tools, and directories
+  packages   - install required packages (placeholder for staged package actions)
+  configs    - stage config files and print manual/apply guidance
+  verify     - run verification checks
+  savepoint  - capture a dated save point
+  all        - run preflight, packages, configs, verify, savepoint
 EOF
+}
+
+run_preflight() {
+  "$ROOT/bootstrap/preflight.sh"
+}
+
+run_packages() {
+  "$ROOT/bootstrap/packages.sh"
+}
+
+run_configs() {
+  "$ROOT/bootstrap/stage-configs.sh"
+}
+
+run_verify() {
+  "$ROOT/bootstrap/verify.sh"
+}
+
+run_savepoint() {
+  "$ROOT/scripts/capture-savepoint.sh"
+}
+
+case "$PHASE" in
+  preflight) run_preflight ;;
+  packages) run_packages ;;
+  configs) run_configs ;;
+  verify) run_verify ;;
+  savepoint) run_savepoint ;;
+  all)
+    run_preflight
+    run_packages
+    run_configs
+    run_verify
+    run_savepoint
+    ;;
+  -h|--help|help)
+    usage
+    ;;
+  *)
+    echo "Unknown phase: $PHASE" >&2
+    usage >&2
+    exit 1
+    ;;
+esac
