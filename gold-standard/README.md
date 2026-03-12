@@ -22,10 +22,16 @@ This repository was derived from a live Raspberry Pi host hardened in stages.
 - `docs/runbook.md` — operator steps and recovery
 - `docs/bootstrap-architecture.md` — one-line installer plan
 - `docs/workflow-mac-github-pi.md` — recommended Mac/GitHub/Pi operating model
+- `docs/help-me/` — incident notes, recovery guides, and hard-won operator lessons
 - `configs/` — hardened config templates
 - `bootstrap/` — staged bootstrap entrypoints
 - `scripts/` — helper utilities and save-point capture
 - `savepoints/` — dated operator save points
+
+## Help Me
+Start here for real-world failures and recovery notes:
+- `docs/help-me/networking-dhcp-dual-uplink.md` — DHCP drift, dual-interface conflict, and the single-primary-uplink fix
+- `docs/help-me/eero-dhcp-reservations-and-ports.md` — Eero-specific DHCP reservation, port forwarding, and static-IP guidance
 
 ## Bootstrap scaffold
 Current staged entrypoint:
