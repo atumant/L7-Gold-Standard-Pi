@@ -29,6 +29,22 @@ source ./bootstrap/profile.example.env
 ./bootstrap/install.sh savepoint
 ```
 
+## End-to-end staged apply
+```bash
+cd gold-standard
+AUTO_APPROVE=yes ./bootstrap/apply-all.sh
+```
+
+This orchestrates:
+- render
+- config staging
+- OpenClaw config apply
+- firewall apply
+- SSH apply
+- service minimization
+- verification
+- savepoint capture
+
 ## Rollback idea
 If firewall behavior is wrong, restore the backup copy:
 ```bash

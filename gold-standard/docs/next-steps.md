@@ -4,6 +4,7 @@
 - Mac repo identity set to `Azrael_Atum`
 
 ## Proceeding now
-- implement bootstrap scaffolding in a way suitable for a future one-line installer
+- turn staged bootstrap/apply flow into a more coherent end-to-end pipeline
 - keep documentation current
 - maintain periodic save points
+- continue converting conservative scaffolds into idempotent production-grade apply logic
