@@ -28,7 +28,12 @@ if [ -z "$ans" ]; then
   read -r -p "Apply rendered nftables.conf now? [y/N] " ans
 fi
 if [[ "$ans" =~ ^([Yy]|yes|YES|true|TRUE|1)$ ]]; then
-  sudo cp "$ROOT/rendered/nftables.conf" /etc/nftables.conf
+  if sudo cmp -s "$ROOT/rendered/nftables.conf" /etc/nftables.conf 2>/dev/null; then
+    echo "nftables config already matches rendered file; skipping copy."
+  else
+    sudo cp "$ROOT/rendered/nftables.conf" /etc/nftables.conf
+    echo "Installed rendered nftables config."
+  fi
   sudo nft -f /etc/nftables.conf
   sudo systemctl restart nftables
   echo "Applied nftables config."

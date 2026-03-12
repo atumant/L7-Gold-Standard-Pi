@@ -21,11 +21,22 @@ if [ -z "$ans" ]; then
   read -r -p "Apply rendered SSH snippets now? [y/N] " ans
 fi
 if [[ "$ans" =~ ^([Yy]|yes|YES|true|TRUE|1)$ ]]; then
-  sudo cp "$SRC/50-cloud-init.conf" /etc/ssh/sshd_config.d/50-cloud-init.conf
-  sudo cp "$SRC/60-hardening.conf" /etc/ssh/sshd_config.d/60-hardening.conf
+  changed=0
+  if ! sudo cmp -s "$SRC/50-cloud-init.conf" /etc/ssh/sshd_config.d/50-cloud-init.conf 2>/dev/null; then
+    sudo cp "$SRC/50-cloud-init.conf" /etc/ssh/sshd_config.d/50-cloud-init.conf
+    changed=1
+  fi
+  if ! sudo cmp -s "$SRC/60-hardening.conf" /etc/ssh/sshd_config.d/60-hardening.conf 2>/dev/null; then
+    sudo cp "$SRC/60-hardening.conf" /etc/ssh/sshd_config.d/60-hardening.conf
+    changed=1
+  fi
   sudo sshd -t
-  sudo systemctl reload ssh
-  echo "Applied SSH snippets and reloaded sshd."
+  if [ "$changed" -eq 1 ]; then
+    sudo systemctl reload ssh
+    echo "Applied SSH snippets and reloaded sshd."
+  else
+    echo "SSH snippets already match rendered files; validation passed, no reload needed."
+  fi
 else
   echo "Skipped SSH apply."
 fi
