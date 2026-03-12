@@ -16,8 +16,11 @@ echo "About to install rendered SSH config snippets:"
 echo "- /etc/ssh/sshd_config.d/50-cloud-init.conf"
 echo "- /etc/ssh/sshd_config.d/60-hardening.conf"
 echo "Backups: $BACKUP_DIR"
-read -r -p "Apply rendered SSH snippets now? [y/N] " ans
-if [[ "$ans" =~ ^[Yy]$ ]]; then
+ans="${AUTO_APPROVE:-}"
+if [ -z "$ans" ]; then
+  read -r -p "Apply rendered SSH snippets now? [y/N] " ans
+fi
+if [[ "$ans" =~ ^([Yy]|yes|YES|true|TRUE|1)$ ]]; then
   sudo cp "$SRC/50-cloud-init.conf" /etc/ssh/sshd_config.d/50-cloud-init.conf
   sudo cp "$SRC/60-hardening.conf" /etc/ssh/sshd_config.d/60-hardening.conf
   sudo sshd -t

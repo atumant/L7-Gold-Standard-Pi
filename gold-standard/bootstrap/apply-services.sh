@@ -14,8 +14,11 @@ actions=()
 
 echo "Service actions to apply: ${actions[*]:-(none)}"
 [ "${PRESERVE_PI_CONNECT:-true}" = "true" ] && echo "Pi Connect preserved."
-read -r -p "Apply service minimization now? [y/N] " ans
-if [[ "$ans" =~ ^[Yy]$ ]]; then
+ans="${AUTO_APPROVE:-}"
+if [ -z "$ans" ]; then
+  read -r -p "Apply service minimization now? [y/N] " ans
+fi
+if [[ "$ans" =~ ^([Yy]|yes|YES|true|TRUE|1)$ ]]; then
   for svc in "${actions[@]}"; do
     sudo systemctl stop "$svc" 2>/dev/null || true
     sudo systemctl disable "$svc" 2>/dev/null || true

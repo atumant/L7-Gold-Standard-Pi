@@ -23,8 +23,11 @@ echo "- reload nftables"
 echo "- keep SSH changes manual/explicit until templating matures"
 
 echo
-read -r -p "Apply rendered nftables.conf now? [y/N] " ans
-if [[ "$ans" =~ ^[Yy]$ ]]; then
+ans="${AUTO_APPROVE:-}"
+if [ -z "$ans" ]; then
+  read -r -p "Apply rendered nftables.conf now? [y/N] " ans
+fi
+if [[ "$ans" =~ ^([Yy]|yes|YES|true|TRUE|1)$ ]]; then
   sudo cp "$ROOT/rendered/nftables.conf" /etc/nftables.conf
   sudo nft -f /etc/nftables.conf
   sudo systemctl restart nftables
