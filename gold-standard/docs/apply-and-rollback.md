@@ -13,14 +13,17 @@ Bootstrap now supports rendering configuration output and a conservative apply s
 7. Capture a save point
 
 ## Current apply scope
-- nftables only
-- with pre-apply backups of nftables and SSH config state
+- nftables
+- OpenClaw config
+- with pre-apply backups of nftables and OpenClaw config state
 
 ## Example
 ```bash
 cd gold-standard
 source ./bootstrap/profile.example.env
 ./bootstrap/install.sh render
+./bootstrap/install.sh configs
+./bootstrap/install.sh openclaw-apply
 ./bootstrap/apply.sh
 ./bootstrap/install.sh verify
 ./bootstrap/install.sh savepoint
@@ -32,6 +35,12 @@ If firewall behavior is wrong, restore the backup copy:
 sudo cp savepoints/apply-backups/<timestamp>/nftables.conf.before /etc/nftables.conf
 sudo nft -f /etc/nftables.conf
 sudo systemctl restart nftables
+```
+
+If OpenClaw config behavior is wrong, restore the backup copy:
+```bash
+cp savepoints/apply-backups/openclaw.json.<timestamp>.before ~/.openclaw/openclaw.json
+openclaw gateway restart
 ```
 
 ## Rule

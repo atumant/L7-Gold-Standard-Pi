@@ -1,0 +1,10 @@
+{
+  "gateway": {
+    "bind": "lan",
+    "port": 18789,
+    "auth": {
+      "mode": "password",
+      "password": "Th3Omnipotent11!!"
+    }
+  }
+}
